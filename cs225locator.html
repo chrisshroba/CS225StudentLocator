@@ -6,12 +6,12 @@
     <style type="text/css">
         html { height: 100% }
         body { height: 100%; margin: 0; padding: 0 }
-        #map-canvas { height: 80% }
+        #map-canvas { height: 90% }
         button { 
             position: fixed;
-            bottom: 0px;
+            bottom: 4%;
+            margin-left: 50%;
             margin-right: auto;
-            margin-left: auto;
         }
     </style>
     <script type="text/javascript" src="https://maps.googleapis.com/maps/api/js?key=AIzaSyB0daj7THd-EsAC5Ujp2BosndO52SpltQA&sensor=false"></script>
@@ -25,22 +25,20 @@
             zoom: 4
         };
 
-        var disabled=false;
-
-        var markerAdded=false;
+        var disabled = false;
+        var markerAdded = false;
 
         var map = new google.maps.Map(document.getElementById("map-canvas"), mapOptions);
-
         var latlng = new google.maps.LatLng(40, -88);
-        var marker;
-
         var lat = latlng.lat();
         var lng = latlng.lng();
+        var marker;
+
 
         new Firebase('https://cs225locator.firebaseIO.com').once("value", 
             function(ds) {
-                var id=0;
-                var arr = new Array();
+                var id = 0;
+                var arr = [];
 
                 ds.forEach(
                     function(cs){
@@ -48,24 +46,18 @@
                     }
                 );
 
-                for(var i=0;i<arr.length;i++) {
-                    //alert(llid);
+                for(var i = 0; i<arr.length; i ++) {
                     var fb = new Firebase('https://cs225locator.firebaseIO.com');
                     var ref = fb.child(arr[i]+"");
                     ref.on("value",function(ns)
                     {
                         var dat = ns.val();
-                        //alert(dat);
                         var datlat = dat.latitude;
                         var datlng = dat.longitude;
-                        //alert(datlat+", "+datlng);
 
                         lldata = new google.maps.LatLng(datlat,datlng)
 
-
-
-                                marker = new google.maps.Marker({
-
+                        marker = new google.maps.Marker({
                           position: lldata,
                           map: map
                         });
